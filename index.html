@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Calculator App</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-color: #f8fafc;
+            --btn-bg: #334155;
+            --btn-hover: #475569;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --operator-bg: #f59e0b;
+            --operator-hover: #d97706;
+            --equal-bg: #10b981;
+            --equal-hover: #059669;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text-color: #0f172a;
+            --btn-bg: #e2e8f0;
+            --btn-hover: #cbd5e1;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --operator-bg: #f59e0b;
+            --operator-hover: #d97706;
+            --equal-bg: #10b981;
+            --equal-hover: #059669;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .calculator {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .header h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .display {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 15px 20px;
+            text-align: right;
+            margin-bottom: 20px;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .history-text {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            min-height: 20px;
+        }
+
+        .main-text {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            background-color: var(--btn-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: var(--btn-hover);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-operator {
+            background-color: var(--operator-bg);
+            color: white;
+        }
+
+        .btn-operator:hover {
+            background-color: var(--operator-hover);
+        }
+
+        .btn-action {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-action:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-equal {
+            background-color: var(--equal-bg);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-equal:hover {
+            background-color: var(--equal-hover);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <div class="header">
+            <h2>Calculator</h2>
+            <button class="theme-toggle" id="themeToggle">🌙</button>
+        </div>
+        <div class="display">
+            <div class="history-text" id="history"></div>
+            <div class="main-text" id="display">0</div>
+        </div>
+        <div class="buttons">
+            <button class="btn-action" onclick="clearDisplay()">C</button>
+            <button class="btn-action" onclick="deleteLast()">DEL</button>
+            <button class="btn-action" onclick="appendInput('%')">%</button>
+            <button class="btn-operator" onclick="appendInput('/')">÷</button>
+
+            <button onclick="appendInput('7')">7</button>
+            <button onclick="appendInput('8')">8</button>
+            <button onclick="appendInput('9')">9</button>
+            <button class="btn-operator" onclick="appendInput('*')">×</button>
+
+            <button onclick="appendInput('4')">4</button>
+            <button onclick="appendInput('5')">5</button>
+            <button onclick="appendInput('6')">6</button>
+            <button class="btn-operator" onclick="appendInput('-')">−</button>
+
+            <button onclick="appendInput('1')">1</button>
+            <button onclick="appendInput('2')">2</button>
+            <button onclick="appendInput('3')">3</button>
+            <button class="btn-operator" onclick="appendInput('+')">+</button>
+
+            <button onclick="appendInput('0')">0</button>
+            <button onclick="appendInput('.')">.</button>
+            <button class="btn-equal" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
