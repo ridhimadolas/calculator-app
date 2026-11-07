@@ -1,90 +1,87 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>College Calculator App</title>
+    <title>Python College Calculator</title>
+    <!-- PyScript setup to run Python in browser -->
+    <link rel="stylesheet" href="https://pyscript.net/releases/2023.11.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2023.11.1/core.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
         body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #1e1e24; color: #fff; }
-        .calculator { background-color: #2b2d42; width: 320px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .header h3 { font-size: 1.1rem; color: #edf2f4; }
-        .display { background-color: #14151f; width: 100%; height: 60px; border: none; border-radius: 8px; text-align: right; padding: 0 16px; font-size: 1.8rem; color: #fff; font-weight: 600; margin-bottom: 20px; }
-        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        button { height: 50px; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; background-color: #4a4e69; color: #fff; transition: background 0.2s; }
-        button:hover { background-color: #5c6285; }
-        button:active { transform: scale(0.97); }
-        .btn-action { background-color: #3a86ff; }
-        .btn-operator { background-color: #ffb703; color: #000; }
-        .btn-equals { background-color: #06d6a0; color: #000; grid-column: span 2; }
+        .calculator { background-color: #2b2d42; width: 300px; border-radius: 12px; padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .display { background-color: #14151f; width: 100%; height: 50px; border: none; border-radius: 6px; text-align: right; padding: 0 12px; font-size: 1.5rem; color: #fff; margin-bottom: 15px; }
+        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        button { height: 45px; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; background-color: #4a4e69; color: #fff; }
+        .btn-op { background-color: #ffb703; color: #000; }
+        .btn-eq { background-color: #06d6a0; color: #000; grid-column: span 2; }
     </style>
 </head>
 <body>
+
     <div class="calculator">
-        <div class="header">
-            <h3>Calculator</h3>
-        </div>
         <input type="text" class="display" id="display" value="0" readonly>
         <div class="buttons">
-            <button class="btn-action" onclick="clearDisplay()">C</button>
-            <button class="btn-action" onclick="deleteLast()">DEL</button>
-            <button class="btn-action" onclick="appendInput('%')">%</button>
-            <button class="btn-operator" onclick="appendInput('/')">÷</button>
+            <button class="btn-op" py-click="clear_display">C</button>
+            <button class="btn-op" py-click="delete_last">DEL</button>
+            <button class="btn-op" py-click="append_input('%')">%</button>
+            <button class="btn-op" py-click="append_input('/')">÷</button>
 
-            <button onclick="appendInput('7')">7</button>
-            <button onclick="appendInput('8')">8</button>
-            <button onclick="appendInput('9')">9</button>
-            <button class="btn-operator" onclick="appendInput('*')">×</button>
+            <button py-click="append_input('7')">7</button>
+            <button py-click="append_input('8')">8</button>
+            <button py-click="append_input('9')">9</button>
+            <button class="btn-op" py-click="append_input('*')">×</button>
 
-            <button onclick="appendInput('4')">4</button>
-            <button onclick="appendInput('5')">5</button>
-            <button onclick="appendInput('6')">6</button>
-            <button class="btn-operator" onclick="appendInput('-')">-</button>
+            <button py-click="append_input('4')">4</button>
+            <button py-click="append_input('5')">5</button>
+            <button py-click="append_input('6')">6</button>
+            <button class="btn-op" py-click="append_input('-')">-</button>
 
-            <button onclick="appendInput('1')">1</button>
-            <button onclick="appendInput('2')">2</button>
-            <button onclick="appendInput('3')">3</button>
-            <button class="btn-operator" onclick="appendInput('+')">+</button>
+            <button py-click="append_input('1')">1</button>
+            <button py-click="append_input('2')">2</button>
+            <button py-click="append_input('3')">3</button>
+            <button class="btn-op" py-click="append_input('+')">+</button>
 
-            <button onclick="appendInput('0')">0</button>
-            <button onclick="appendInput('.')">.</button>
-            <button class="btn-equals" onclick="calculate()">=</button>
+            <button py-click="append_input('0')">0</button>
+            <button py-click="append_input('.')">.</button>
+            <button class="btn-eq" py-click="calculate">=</button>
         </div>
     </div>
 
-    <script>
-        const display = document.getElementById('display');
+    <!-- PURE PYTHON CODE LOGIC -->
+    <py-script>
+from js import document
 
-        function appendInput(val) {
-            if (display.value === '0' || display.value === 'Error') {
-                display.value = val;
-            } else {
-                display.value += val;
-            }
-        }
+def append_input(val):
+    display = document.getElementById('display')
+    if display.value == "0" or display.value == "Error":
+        display.value = str(val)
+    else:
+        display.value = display.value + str(val)
 
-        function clearDisplay() {
-            display.value = '0';
-        }
+def clear_display(event=None):
+    display = document.getElementById('display')
+    display.value = "0"
 
-        function deleteLast() {
-            if (display.value.length === 1 || display.value === 'Error') {
-                display.value = '0';
-            } else {
-                display.value = display.value.slice(0, -1);
-            }
-        }
+def delete_last(event=None):
+    display = document.getElementById('display')
+    if len(display.value) <= 1 or display.value == "Error":
+        display.value = "0"
+    else:
+        display.value = display.value[:-1]
 
-        function calculate() {
-            try {
-                display.value = eval(display.value);
-            } catch (e) {
-                display.value = 'Error';
-            }
-        }
-    </script>
+def calculate(event=None):
+    display = document.getElementById('display')
+    try:
+        # Standard Python eval calculation
+        result = eval(display.value)
+        display.value = str(result)
+    except Exception:
+        display.value = "Error"
+    </py-script>
+
 </body>
 </html>
-
         
